@@ -109,6 +109,20 @@ def login():
     redirect_uri = url_for('authorize', _external=True)
     return google.authorize_redirect(redirect_uri)
 
+@app.route('/spreadsheet', methods=['GET', 'POST'])
+def spreedsheet():
+    if request.method == 'GET':
+        return make_response('failure')
+    if request.method == 'POST':
+
+        create_row_data = {'message': "Test"}
+        
+        response = requests.post(
+            url, data=json.dumps(create_row_data),
+            headers={'Content-Type': 'application/json'}
+        )
+        return response.content
+
 @app.route('/authorize')
 def authorize():
     # idinfo = id_token.verify_oauth2_token(token, requests.Request(), CLIENT_ID)
