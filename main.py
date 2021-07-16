@@ -38,6 +38,8 @@ mysql = MySQL(app)
 
 data_put_args = reqparse.RequestParser()
 data_put_args.add_argument("id", type=int, help="id of the data", required=True)
+link_post_args = reqparse.RequestParser()
+link_post_args.add_argument("link", type=str, help="link of the data", required=True)
 
 class tableauData(Resource):
     def get(self, id):
@@ -47,33 +49,28 @@ class tableauData(Resource):
         data = []
         for f in dataAhp:
             dat = {
-                'name' : f[0],
-                'jumlahAtt1' : f[1],
-                'jumlahAtt2' : f[2],
-                'jumlahAtt3' : f[3],
-                'rataAtt1' : f[4],
-                'rataAtt2' : f[5],
-                'rataAtt3' : f[6],
-                'matrix1' : f[7],
-                'matrix2' : f[8],
-                'matrix3' : f[9]
+                'name' : f[1],
+                'jumlahAtt1' : f[2],
+                'jumlahAtt2' : f[3],
+                'jumlahAtt3' : f[4],
+                'rataAtt1' : f[5],
+                'rataAtt2' : f[6],
+                'rataAtt3' : f[7],
+                'matrix1' : f[8],
+                'matrix2' : f[9],
+                'matrix3' : f[10]
             }
             data.append(dat)
         jsonString = json.loads(json.dumps(data, indent=4, sort_keys=True))
         return jsonString
 
-    # def put(self, id):
-    #     args = data_put_args.parse_args()
-    #     data[id] = args
-    #     return data[id], 201
-
-    # def delete(self, id):
-    #     abort_if_data_id_doesnt_exist(id)
-    #     del data[id]
-    #     return '', 200
-
+class linkspreadsheet(Resource):
+    def post(self):
+        args = link_post_args.parse_args()
+        return args['link']
 
 api.add_resource(tableauData, "/tableauData/<string:id>")
+api.add_resource(linkspreadsheet, "/sendlink")
 
 # Session config
 app.secret_key = os.getenv("APP_SECRET_KEY")
